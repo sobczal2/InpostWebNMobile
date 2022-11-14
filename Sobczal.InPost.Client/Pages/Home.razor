@@ -1,0 +1,26 @@
+﻿@page "/"
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Authorization
+@using Sobczal.InPost.Application.Dtos.Packages
+@using Sobczal.InPost.Application.Results
+
+@attribute [Authorize]
+
+@inject HttpClient HttpClient
+
+<h3>Home</h3>
+@if (_lockers?.Payload != null)
+{
+    foreach (var locker in _lockers.Payload)
+    {
+        <h1>@locker.Name</h1>
+    }
+}
+
+@code {
+    private InPostResult<IEnumerable<LockerDto>>? _lockers;
+    protected override async Task OnInitializedAsync()
+    {
+        _lockers = await HttpClient.GetFromJsonAsync<InPostResult<IEnumerable<LockerDto>>>("api/Lockers/GetLockers");
+    }
+}

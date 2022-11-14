@@ -1,0 +1,27 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_inPostTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <AppBar/>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code{
+
+    readonly MudTheme _inPostTheme = new ()
+    {
+        Palette = new Palette()
+        {
+            PrimaryLighten = "#FFCD00",
+            Primary = "#F8B12A",
+            TextPrimary = "#3C3C3C",
+            AppbarBackground = "#EEEEEE",
+            AppbarText = "#3C3C3C"
+        }
+    };
+}
