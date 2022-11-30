@@ -1,0 +1,37 @@
+﻿@page "/MyPackages"
+@using System.Net.Http.Json
+@using Sobczal.InPost.Application.Dtos.Packages
+@using Blazorise
+@using Sobczal.InPost.Client.Components.Common
+@using Sobczal.InPost.Client.Components.MyPackages
+
+@inject HttpClient Http
+
+<AuthorizedComponentBase>
+    <LoadedComponentBase Loading="@(PackageDtos == null)">
+        <Container Style="width: 50rem; border: #F8B12A 3px solid; position: static; padding: 0; margin-top: 5rem; margin-bottom: 5rem; cursor: pointer;">
+            @if (PackageDtos != null && PackageDtos.Any())
+            {
+                @foreach (var package in PackageDtos)
+                {
+                    <MyPackageItem PackageDto="@package"/>
+                }
+            }
+            else
+            {
+                <Heading Size="HeadingSize.Is3"><Icon Name="IconName.ExclamationTriangle"/> No packages found</Heading>
+            }
+        </Container>
+    </LoadedComponentBase>
+</AuthorizedComponentBase>
+
+
+@code
+{
+    public IEnumerable<PackageDto>? PackageDtos { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PackageDtos = await Http.GetFromJsonAsync<IEnumerable<PackageDto>>("/api/Package/ListYourPackages");
+    }
+}

@@ -43,15 +43,123 @@ namespace Sobczal.InPost.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c3895097-3b6a-4436-a258-e0d412da6332"),
-                            Address = "Address 1",
-                            Name = "Locker 1"
+                            Id = new Guid("a2c83514-272c-4786-93dc-a951d975caf6"),
+                            Address = "ul. Jagiellońska 7, 03-721 Warszawa",
+                            Name = "WAW333M"
                         },
                         new
                         {
-                            Id = new Guid("3113bbae-6193-49f4-a39a-ffbc135a8b12"),
-                            Address = "Address 2",
-                            Name = "Locker 2"
+                            Id = new Guid("c1ff144a-7a35-424c-997c-81dee284d516"),
+                            Address = "ul. Targowa 24, 03-733 Warszawa",
+                            Name = "WAW166M"
+                        },
+                        new
+                        {
+                            Id = new Guid("b803486b-f56f-4453-9beb-a678f26671f7"),
+                            Address = "ul. Kijowska 20, 03-743 Warszawa",
+                            Name = "WAW36A"
+                        },
+                        new
+                        {
+                            Id = new Guid("4f1247b1-0999-498c-aa85-5e6069bc7979"),
+                            Address = "ul. Żupnicza 15, 03-821 Warszawa",
+                            Name = "WAW642M"
+                        },
+                        new
+                        {
+                            Id = new Guid("3028e3f0-5abf-49c6-a785-3b7e88da9157"),
+                            Address = "ul. Mińska 69/U-5, 03-828 Warszawa",
+                            Name = "WAW44H"
+                        },
+                        new
+                        {
+                            Id = new Guid("a34ba07d-5c67-4fa1-abb7-b9033d0971af"),
+                            Address = "ul. Kickiego 21 A, 04-390 Warszawa",
+                            Name = "WAW343M"
+                        },
+                        new
+                        {
+                            Id = new Guid("e818b676-8937-4cbd-bd01-90fa3b10941b"),
+                            Address = "ul. Chrzanowskiego 4, 04-381 Warszawa",
+                            Name = "WAW106M"
+                        },
+                        new
+                        {
+                            Id = new Guid("9f9a866c-5b4d-4ff3-9cc6-9f33933e7786"),
+                            Address = "ul. Przeworska 7, 04-382 Warszawa",
+                            Name = "WAW15H"
+                        },
+                        new
+                        {
+                            Id = new Guid("0cd04aae-0ca0-4f95-82d1-6502990f188d"),
+                            Address = "ul. Zabraniceka 20 / Rzeczna 20, 03-872 Warszawa",
+                            Name = "WAW08N"
+                        },
+                        new
+                        {
+                            Id = new Guid("79bc1380-cbea-48b6-ad11-b0c4c54209d4"),
+                            Address = "ul. Birżanska 1, 03-780 Warszawa",
+                            Name = "WAW130AP"
+                        },
+                        new
+                        {
+                            Id = new Guid("47f3a1ec-339a-43fe-b75d-4a3d7648da48"),
+                            Address = "ul. Wincentego 4, 03-505 Warszawa",
+                            Name = "WAW15A"
+                        },
+                        new
+                        {
+                            Id = new Guid("4e7ec03b-c86f-4fdf-926c-315be006baa7"),
+                            Address = "ul. Lidzka 5, 03-523 Warszawa",
+                            Name = "WAW431M"
+                        },
+                        new
+                        {
+                            Id = new Guid("c9c9444b-5eb5-47ca-839c-fce7abd15d2b"),
+                            Address = "ul. Odrowąża 7A, 03-310 Warszawa",
+                            Name = "WAW127AP"
+                        },
+                        new
+                        {
+                            Id = new Guid("48f73e4f-2c3d-4c0b-8497-25f3d8bc134e"),
+                            Address = "ul. Jagiellońska 82B, 03-301 Warszawa",
+                            Name = "WAW465M"
+                        },
+                        new
+                        {
+                            Id = new Guid("b3799b43-a034-45a3-b2a8-edc5dfa97a41"),
+                            Address = "ul. Jagiellońska 57/5, 03-301 Warszawa",
+                            Name = "WAW30B"
+                        },
+                        new
+                        {
+                            Id = new Guid("262a4d59-9c9c-41e3-a184-6ae04233b591"),
+                            Address = "ul. Popiełuszki 17b, 01-711 Warszawa",
+                            Name = "WAW92N"
+                        },
+                        new
+                        {
+                            Id = new Guid("89281263-3449-473e-8ec6-051c4d382668"),
+                            Address = "ul. Broniewskiego 26, 01-771 Warszawa",
+                            Name = "WAW87AP"
+                        },
+                        new
+                        {
+                            Id = new Guid("68af2be2-f33e-4076-b14f-7078efc209ea"),
+                            Address = "ul. Kochanowskiego 10A, 01-716 Warszawa",
+                            Name = "WAW18M"
+                        },
+                        new
+                        {
+                            Id = new Guid("c723247d-f28f-4d10-b7af-5a5778cea7f4"),
+                            Address = "ul. Josepha Conrada 1, 01-922 Warszawa",
+                            Name = "WAW39M"
+                        },
+                        new
+                        {
+                            Id = new Guid("6e5b022d-4b53-4307-aa0a-065cfe7c8b98"),
+                            Address = "ul. Pabla Nerudy 1, 01-926 Warszawa",
+                            Name = "WAW395M"
                         });
                 });
 
@@ -105,10 +213,6 @@ namespace Sobczal.InPost.Infrastructure.Migrations
 
                     b.Property<DateTime>("At")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<Guid>("PackageId")
                         .HasColumnType("uuid");

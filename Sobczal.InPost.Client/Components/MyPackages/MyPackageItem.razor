@@ -1,0 +1,24 @@
+﻿@using Sobczal.InPost.Application.Dtos.Packages
+@using Blazorise
+
+@inject NavigationManager NavigationManager
+
+@if (PackageDto != null)
+{
+    <div style="border-top: black 2px solid; margin: 2rem;" onclick="@OnClick">
+        <Heading>Do: @PackageDto.To.Username</Heading>
+        <Heading>Od: @PackageDto.From.Username</Heading>
+        <Heading>Id paczki: @PackageDto.Id</Heading>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public PackageDto? PackageDto { get; set; }
+    
+    public void OnClick()
+    {
+        NavigationManager.NavigateTo("/tracking/" + PackageDto.Id);
+    }
+}

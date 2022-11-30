@@ -5,7 +5,7 @@ namespace Sobczal.InPost.Models.Users;
 
 public class InPostUser : Entity<string>
 {
-    public string Email { get; set; } = default!;
+    public string Username { get; set; } = default!;
     public virtual IEnumerable<Package> SentPackages { get; set; } = default!;
     public virtual IEnumerable<Package> ReceivedPackages { get; set; } = default!;
 }

@@ -8,5 +8,4 @@ public class PackageStep : Entity<Guid>
     public Guid PackageId { get; set; }
     public PackageStepType Type { get; set; }
     public DateTime At { get; set; }
-    public string Description { get; set; } = default!;
 }

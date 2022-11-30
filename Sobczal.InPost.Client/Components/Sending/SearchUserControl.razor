@@ -1,0 +1,45 @@
+﻿@using System.Net.Http.Json
+@using Sobczal.InPost.Dtos.Dtos.Users
+@using Blazorise
+@using Blazorise.Components
+
+@inject HttpClient Http
+
+<Field>
+    <FieldLabel For="autocomplete_user_control">Do kogo?</FieldLabel>
+    <Autocomplete
+        ElementId="autocomplete_user_control"
+        TItem="InPostUserDto"
+        TValue="string?"
+        Data="@((_users ?? Array.Empty<InPostUserDto>()))"
+        TextField="@(( item ) => item.Username)"
+        ValueField="@(( item ) => item.Id)"
+        @bind-SelectedValue="@SelectedValue"
+        Placeholder="Szukaj użytkownika po mailu..."
+        FreeTyping
+        CustomFilter="(dto, s) => dto.Username.Contains(s, StringComparison.OrdinalIgnoreCase)"
+    />
+</Field>
+
+@code {
+    [Parameter]
+    public EventCallback<string?> OnSelectedValueChange { get; set; }
+
+    public string? SelectedValue
+    {
+        get => _selectedValue;
+        private set
+        {
+            OnSelectedValueChange.InvokeAsync(value);
+            _selectedValue = value;
+        }
+    }
+
+    private string? _selectedValue;
+    private IEnumerable<InPostUserDto>? _users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _users = await Http.GetFromJsonAsync<IEnumerable<InPostUserDto>>("api/Users/ListUsers");
+    }
+}

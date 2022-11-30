@@ -1,0 +1,44 @@
+﻿@inject NavigationManager Navigation
+
+<Bar Breakpoint="Breakpoint.Desktop"
+     Background="Background.White"
+     ThemeContrast="ThemeContrast.Light"
+     Style="border-bottom: #F8B12A 0.5rem solid;">
+    <BarBrand>
+        <Button Clicked="GoHome">
+            <Image Source="/images/inpost-logo.svg"/>
+        </Button>
+    </BarBrand>
+    <BarToggler/>
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <BarLink To="/sending">
+                    <Heading Size="HeadingSize.Is4" TextColor="TextColor.Secondary">
+                        Wysyłanie
+                    </Heading>
+                </BarLink>
+            </BarItem>
+            <BarItem>
+                <BarLink To="/MyPackages">
+                    <Heading Size="HeadingSize.Is4" TextColor="TextColor.Secondary">
+                        Moje paczki
+                    </Heading>
+                </BarLink>
+            </BarItem>
+        </BarStart>
+        <BarEnd>
+            <BarItem>
+                <AccessControl/>
+            </BarItem>
+        </BarEnd>
+    </BarMenu>
+</Bar>
+
+@code
+{
+    private void GoHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

@@ -1,0 +1,76 @@
+﻿@using Blazorise
+
+@inject NavigationManager Navigation
+
+<Row Background="Background.Primary" Margin="Margin.Is0">
+    <Column ColumnSize="ColumnSize.Is4" Style="display: flex; justify-content: end;">
+        <Image Source="/images/courier1.png" Width="Width.Is75"/>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4" Display="Display.Flex">
+        <div Style="width: 100%; margin: auto;">
+            <Row Background="Background.Dark">
+                <Heading Size="HeadingSize.Is3" TextColor="TextColor.White" Padding="Padding.Is4">
+                    Śledź paczkę
+                </Heading>
+            </Row>
+            <Row Style="margin-top: 1rem;">
+                <Column ColumnSize="ColumnSize.Is7" Padding="Padding.Is0">
+                    <Field>
+                        <TextEdit
+                            VerticalAlignment="VerticalAlignment.Middle"
+                            Margin="Margin.Is0"
+                            Padding="Padding.Is2"
+                            Style="border: grey 2px solid;"
+                            Placeholder="Znajdź paczkę"
+                            @bind-Text="@TrackingNumber"
+                            />
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is5" Style="padding-right: 0;">
+                    <Button
+                        Style="width: 100%; margin-right: 0;"
+                        Background="Background.Secondary"
+                        Disabled="@_buttonDisabled"
+                        Clicked="FindButtonClicked"
+                        >
+                        Znajdź
+                    </Button>
+                </Column>
+            </Row>
+        </div>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4" Style="display: flex; justify-content: end;">
+        <Image Source="/images/ryan1.png" Display="Display.Flex" Width="Width.Is100"/>
+    </Column>
+</Row>
+
+@code {
+    private bool _buttonDisabled = true;
+
+    public string TrackingNumber
+    {
+        get => _trackingNumber;
+        set
+        {
+            _trackingNumber = value.ToLower();
+            HandleTrackingNumberChanged();
+        }
+    }
+
+    private string _trackingNumber = "";
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private void HandleTrackingNumberChanged()
+    {
+        _buttonDisabled = !Guid.TryParse(_trackingNumber, out _);
+        StateHasChanged();
+    }
+
+    private void FindButtonClicked()
+    {
+        Navigation.NavigateTo($"/tracking/{TrackingNumber}");
+    }
+}

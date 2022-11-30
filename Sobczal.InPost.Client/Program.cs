@@ -1,8 +1,10 @@
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using MudBlazor.Services;
 using Sobczal.InPost.Client.Shared.Core;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -20,8 +22,16 @@ builder.Services.AddHttpClient("ServerAPI",
         return handler;
     });
 
+builder.Services.AddHttpClient("UnauthorizedServerAPI",
+    client => client.BaseAddress =
+        new Uri(builder.Configuration["ApiBaseUri"] ?? throw new InvalidOperationException()));
+
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+    .CreateClient("UnauthorizedServerAPI"));
+
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("ServerAPI"));
+
 
 builder.Services.AddOidcAuthentication(options =>
 {
@@ -30,6 +40,12 @@ builder.Services.AddOidcAuthentication(options =>
     options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]);
 });
 
-builder.Services.AddMudServices();
+builder.Services
+    .AddBlazorise( options =>
+    {
+        options.Immediate = true;
+    } )
+    .AddBootstrapProviders()
+    .AddFontAwesomeIcons();
 
 await builder.Build().RunAsync();

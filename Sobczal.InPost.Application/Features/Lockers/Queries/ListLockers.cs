@@ -6,7 +6,7 @@ using Sobczal.InPost.Models.Packages;
 
 namespace Sobczal.InPost.Application.Features.Lockers.Queries;
 
-public class GetAllLockers
+public class ListLockers
 {
     public record Query : IRequest<IEnumerable<LockerDto>>;
 
@@ -22,8 +22,8 @@ public class GetAllLockers
         }
         public async Task<IEnumerable<LockerDto>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var lockers = await _lockerRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<LockerDto>>(lockers);
+            return _mapper.Map<IEnumerable<LockerDto>>(await _lockerRepository
+                .GetAllAsync());
         }
     }
 }

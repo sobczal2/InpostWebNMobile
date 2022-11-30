@@ -1,0 +1,48 @@
+﻿@using System.Net.Http.Json
+@using Blazorise
+@using Blazorise.Components
+@using Sobczal.InPost.Application.Dtos.Packages
+
+@inject HttpClient Http
+
+<Field>
+    <FieldLabel For="autocomplete_user_control">@Title</FieldLabel>
+    <Autocomplete
+        ElementId="autocomplete_user_control"
+        TItem="LockerDto"
+        TValue="Guid?"
+        Data="@(_lockers ?? Array.Empty<LockerDto>())"
+        TextField="@(item => $"{item.Name} ({item.Address})")"
+        ValueField="@(item => item.Id)"
+        @bind-SelectedValue="@SelectedValue"
+        Placeholder="Szukaj paczkomatu..."
+        FreeTyping
+        CustomFilter="(dto, s) => dto.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || dto.Address.Contains(s, StringComparison.InvariantCultureIgnoreCase)"
+    />
+</Field>
+
+@code {
+    [Parameter]
+    public EventCallback<Guid?> OnSelectedValueChange { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+
+    public Guid? SelectedValue
+    {
+        get => _selectedValue;
+        private set
+        {
+            OnSelectedValueChange.InvokeAsync(value);
+            _selectedValue = value;
+        }
+    }
+
+    private Guid? _selectedValue;
+    private IEnumerable<LockerDto>? _lockers;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _lockers = await Http.GetFromJsonAsync<IEnumerable<LockerDto>>("api/Lockers/ListLockers");
+    }
+}

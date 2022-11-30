@@ -4,5 +4,4 @@ public class PackageStepDto
 {
     public PackageStepTypeDto Type { get; set; }
     public DateTime At { get; set; }
-    public string Description { get; set; } = default!;
 }

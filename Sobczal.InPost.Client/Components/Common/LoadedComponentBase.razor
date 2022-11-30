@@ -1,0 +1,29 @@
+﻿@using Blazorise
+@using BlazorAnimate
+@using Blazorise.SpinKit
+
+@if (Loading)
+{
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <SpinKit Color="#F8B12A" Size="20vh" Centered="true" Type="SpinKitType.Wander"/>
+        <Heading Size="HeadingSize.Is4" TextColor="TextColor.Black50" TextAlignment="TextAlignment.Center" Style="margin-top: 0; margin-bottom: 5rem;">
+            @Text
+        </Heading>
+    </div>
+}
+else
+{
+    @ChildContent
+}
+
+@code
+{
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public string? Text { get; set; }
+}

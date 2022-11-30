@@ -1,7 +1,16 @@
+using Serilog;
+using Serilog.Events;
 using Sobczal.InPost.Api;
 using Sobczal.InPost.Api.Middleware;
+using Sobczal.InPost.Api.Tasks;
 using Sobczal.InPost.Application;
 using Sobczal.InPost.Infrastructure;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +25,13 @@ builder.Services.AddApiServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
+builder.Services.AddHostedService<BumpPackageStatusHostedService>();
+
+builder.Host.UseSerilog();
+
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 

@@ -29,15 +29,11 @@ public class ErrorHandlingMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        switch (exception.GetType())
+        if (exception is InPostException inPostException)
         {
-            case var _ when exception is InPostException inPostException:
-                context.Response.StatusCode = (int)inPostException.HttpStatusCode;
-                await context.Response.WriteAsJsonAsync(inPostException.InPostErrorResult);
-                break;
-            default:
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                break;
+            context.Response.StatusCode = (int)inPostException.HttpStatusCode;
+            return;
         }
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
     }
 }

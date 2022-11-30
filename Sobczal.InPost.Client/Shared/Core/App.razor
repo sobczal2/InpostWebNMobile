@@ -1,22 +1,57 @@
-﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <Authorizing>
-                    <p>Determining session state, please wait...</p>
-                </Authorizing>
-                <NotAuthorized>
-                    <h1>Sorry</h1>
-                    <p>You're not authorized to reach this page. You need to log in.</p>
-                </NotAuthorized>
-            </AuthorizeRouteView>
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-        </Found>
-        <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
+﻿@using Sobczal.InPost.Client.Components.Common
+
+<Blazorise.ThemeProvider Theme="@_inpostTheme">
+    <CascadingAuthenticationState>
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <Authorizing>
+                        <LoadedComponentBase Loading="false"/>
+                    </Authorizing>
+                    <NotAuthorized>
+                        <h1>Sorry</h1>
+                        <p>You're not authorized to reach this page. You need to log in.</p>
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+            </Found>
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingAuthenticationState>
+</Blazorise.ThemeProvider>
+
+
+@code
+{
+    private Theme _inpostTheme = new()
+    {
+        ColorOptions = new ThemeColorOptions
+        {
+            Primary = "#ffcd00",
+            Secondary = "#F8B12A",
+            Success = "#28a745",
+            Info = "#17a2b8",
+            Warning = "#ffc107",
+            Danger = "#dc3545",
+            Light = "#f8f9fa",
+            Dark = "#343a40",
+        },
+        BackgroundOptions = new ThemeBackgroundOptions()
+        {
+            Primary = "#ffcd00",
+            Secondary = "#F8B12A",
+        },
+        TextColorOptions = new ThemeTextColorOptions()
+        {
+            Primary = "#000000",
+            Secondary = "#ffcd00",
+            White = "#ffffff",
+        },
+        IsGradient = true,
+    };
+}

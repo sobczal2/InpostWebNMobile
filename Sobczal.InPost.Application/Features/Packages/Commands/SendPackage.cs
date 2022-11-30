@@ -21,7 +21,6 @@ public class SendPackage
         private readonly IGenericRepository<Locker, Guid> _lockerRepository;
         private readonly IGenericRepository<InPostUser, string> _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IGenericRepository<PackageStep, Guid> _packageStepRepository;
         private readonly IMapper _mapper;
 
         public Handler(
@@ -30,7 +29,6 @@ public class SendPackage
             IGenericRepository<Locker, Guid> lockerRepository,
             IGenericRepository<InPostUser, string> userRepository,
             IHttpContextAccessor httpContextAccessor,
-            IGenericRepository<PackageStep, Guid> packageStepRepository,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -38,7 +36,6 @@ public class SendPackage
             _lockerRepository = lockerRepository;
             _userRepository = userRepository;
             _httpContextAccessor = httpContextAccessor;
-            _packageStepRepository = packageStepRepository;
             _mapper = mapper;
         }
         public async Task<PackageDto> Handle(Command request, CancellationToken cancellationToken)
@@ -61,14 +58,13 @@ public class SendPackage
                 SourceId = request.SendPackageDto.FromLocker,
                 ToId = request.SendPackageDto.ToUser,
                 FromId = userId,
-                SentAt = DateTime.Now,
+                SentAt = DateTime.UtcNow,
                 CanBePickedUp = false,
                 PackageSteps = new List<PackageStep>()
                 {
-                    new PackageStep()
+                    new()
                     {
-                        At = DateTime.Now,
-                        Description = "Package sent",
+                        At = DateTime.UtcNow,
                         Type = PackageStepType.SentAtBox
                     }
                 }

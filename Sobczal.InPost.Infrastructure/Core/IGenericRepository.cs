@@ -9,4 +9,5 @@ public interface IGenericRepository<TEntity, in TId>
     Task AddAsync(TEntity entity);
     Task UpdateAsync(TEntity entity);
     Task DeleteAsync(TEntity entity);
+    IQueryable<TEntity> Query { get; }
 }

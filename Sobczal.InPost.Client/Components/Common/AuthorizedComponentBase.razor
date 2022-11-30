@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Blazorise
+
+@inject NavigationManager Navigation
+
+<AuthorizeView>
+    <Authorized>
+        @ChildContent
+    </Authorized>
+    <Authorizing>
+        <LoadedComponentBase Loading="true" Text="Authorizing..."/>
+    </Authorizing>
+    <NotAuthorized>
+        <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+            <div Style="border: #ffcd00 2px solid; border-radius: 1rem; padding: 1rem; width: fit-content; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                <Heading Size="HeadingSize.Is4" TextColor="TextColor.Black50">
+                    Musisz się zalogować, żeby zobaczyć tą stronę.
+                </Heading>
+                <Paragraph TextColor="TextColor.Black50" TextWeight="TextWeight.Bold">
+                    <Button Background="Background.Primary" Padding="Padding.Is1" Clicked="SignIn" Color="Color.Secondary">Zaloguj</Button> aby kontynuować.
+                </Paragraph>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private void SignIn()
+    {
+        Navigation.NavigateTo("authentication/login");
+    }
+}

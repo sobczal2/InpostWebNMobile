@@ -5,18 +5,26 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity.Name!
-        <a href="#" @onclick="BeginSignOut">Log out</a>
+        <Heading TextColor="TextColor.Black50" Size="HeadingSize.Is6">@context.User.FindFirst("nickname")?.Value</Heading>
+        <Button Color="Color.Primary" Clicked="SignOut" Float="Float.End">Wyloguj</Button>
     </Authorized>
     <NotAuthorized>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="authentication/login">Log in</MudButton>
+        <Button Color="Color.Secondary" Clicked="SignIn">Zaloguj się</Button>
     </NotAuthorized>
 </AuthorizeView>
 
 @code{
-    private Task BeginSignOut(MouseEventArgs args)
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private string? _nickname;
+
+    private void SignIn()
+    {
+        Navigation.NavigateTo("authentication/login");
+    }
+    private void SignOut(MouseEventArgs args)
     {
         Navigation.NavigateToLogout("authentication/logout");
-        return Task.CompletedTask;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Sobczal.InPost.Application.Results;
 
 namespace Sobczal.InPost.Application.Exceptions;
 
@@ -16,5 +15,4 @@ public class BadRequestException : InPostException
 
 
     public override HttpStatusCode HttpStatusCode => HttpStatusCode.BadRequest;
-    public override InPostErrorResult InPostErrorResult => new(_title, _description);
 }

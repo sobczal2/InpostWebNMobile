@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Sobczal.InPost.Application.Dtos.Packages;
 using Sobczal.InPost.Infrastructure.Core;
 using Sobczal.InPost.Models.Packages;
@@ -32,10 +34,9 @@ public class ListYourPackages
         public async Task<IEnumerable<PackageDto>> Handle(Query request, CancellationToken cancellationToken)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var packages = (await _packageRepository.GetAllAsync())
-                .Where(x => x.FromId == userId || x.ToId == userId);
-            
-            return _mapper.Map<IEnumerable<PackageDto>>(packages);
+            return await _packageRepository.Query
+                .Where(x => x.FromId == userId || x.ToId == userId).ProjectTo<PackageDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken: cancellationToken);
         }
     }
 }

@@ -1,0 +1,48 @@
+﻿@using Sobczal.InPost.Application.Dtos.Packages
+@using Blazorise
+
+<div style="display: flex; flex-direction: row;">
+    @switch (PackageStep.Type)
+    {
+        case PackageStepTypeDto.SentAtBox:
+            <Icon Name="IconName.PlaneDeparture" Style="font-size: 3.5rem; margin-right: 3rem; margin-left: 0px;"/>
+            break;
+        case PackageStepTypeDto.InDelivery:
+            <Icon Name="IconName.Truck" Style="font-size: 3.5rem; margin-right: 3rem; margin-left: 0px;"/>
+            break;
+        case PackageStepTypeDto.ReadyForPickup:
+            <Icon Name="IconName.Inbox" Style="font-size: 3.5rem; margin-right: 3rem; margin-left: 0px;"/>
+            break;
+        case PackageStepTypeDto.PickedUp:
+            <Icon Name="IconName.Heart" Style="font-size: 3.5rem; margin-right: 3rem; margin-left: 0px;"/>
+            break;
+    }
+    <div style="display: flex; flex-direction: column;">
+        <Heading Size="HeadingSize.Is4">@TranslatePackageType(PackageStep.Type)</Heading>
+        <Text>@PackageStep.At.ToLocalTime()</Text>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public PackageStepDto PackageStep { get; set; }
+
+    private string TranslatePackageType(PackageStepTypeDto packageStepTypeDto)
+    {
+        switch (packageStepTypeDto)
+        {
+            case PackageStepTypeDto.SentAtBox:
+                return "Wysłano do paczkomatu";
+            case PackageStepTypeDto.InDelivery:
+                return "W drodze";
+            case PackageStepTypeDto.ReadyForPickup:
+                return "Gotowa do odbioru";
+            case PackageStepTypeDto.PickedUp:
+                return "Odebrano";
+            default:
+                return "Nieznany";
+        }
+    }
+
+}

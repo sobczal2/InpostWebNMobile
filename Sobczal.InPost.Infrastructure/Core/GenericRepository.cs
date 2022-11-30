@@ -7,39 +7,41 @@ public class GenericRepository<TEntity, TId> : IGenericRepository<TEntity, TId>
     where TEntity : Entity<TId>
     where TId : notnull
 {
-    private readonly InPostDbContext _inPostDbContext;
+    protected readonly InPostDbContext InPostDbContext;
 
     public GenericRepository(InPostDbContext inPostDbContext)
     {
-        _inPostDbContext = inPostDbContext;
+        InPostDbContext = inPostDbContext;
     }
 
     public async Task<TEntity?> GetByIdAsync(TId id)
     {
-        return await _inPostDbContext.Set<TEntity>().FirstOrDefaultAsync(x => x.Id.Equals(id));
+        return await InPostDbContext.Set<TEntity>().FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
 
     public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-        return await _inPostDbContext.Set<TEntity>().ToListAsync();
+        return await InPostDbContext.Set<TEntity>().ToListAsync();
     }
 
     public Task AddAsync(TEntity entity)
     {
-        _inPostDbContext.Set<TEntity>().Add(entity);
+        InPostDbContext.Set<TEntity>().Add(entity);
         return Task.CompletedTask;
     }
 
     public Task UpdateAsync(TEntity entity)
     {
-        _inPostDbContext.Set<TEntity>().Attach(entity);
-        _inPostDbContext.Entry(entity).State = EntityState.Modified;
+        InPostDbContext.Set<TEntity>().Attach(entity);
+        InPostDbContext.Entry(entity).State = EntityState.Modified;
         return Task.CompletedTask;
     }
 
     public Task DeleteAsync(TEntity entity)
     {
-        _inPostDbContext.Set<TEntity>().Remove(entity);
+        InPostDbContext.Set<TEntity>().Remove(entity);
         return Task.CompletedTask;
     }
+
+    public IQueryable<TEntity> Query => InPostDbContext.Set<TEntity>();
 }

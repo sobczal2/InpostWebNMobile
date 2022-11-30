@@ -1,0 +1,98 @@
+﻿@page "/sending"
+
+@using System.Net.Http.Json
+@using Sobczal.InPost.Client.Components.Common
+@using Sobczal.InPost.Client.Components.Sending
+@using Blazorise
+@using Sobczal.InPost.Application.Dtos.Packages
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<AuthorizedComponentBase>
+    <Container Style="width: 50rem; border: #F8B12A 3px solid; position: static; padding: 0; border-radius: 2rem; margin-top: 5rem; margin-bottom: 5rem;">
+        <Row Margin="Margin.Is0">
+            <Column ColumnSize="ColumnSize.Is5" Style="padding: 0;">
+                <Image Source="/images/packages-on-guy.jpg" Style="width: 20rem; border-top-left-radius: 2rem; border-bottom-left-radius: 2rem;"/>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is7" Style="padding: 2rem;">
+                <Heading TextColor="TextColor.Secondary" TextWeight="TextWeight.Bold" Size="HeadingSize.Is2">
+                    Wyślij paczkę
+                </Heading>
+                <div style="height: 4rem; color: red;">
+                    @(Error ? "Wystąpił błąd podczas wysyłania paczki" : "")
+                </div>
+                <SearchUserControl OnSelectedValueChange="OnToUserChange"/>
+                <SearchLockerControl OnSelectedValueChange="OnFromLockerChange" Title="Z którego paczkomatu?"/>
+                <SearchLockerControl OnSelectedValueChange="OnToLockerChange" Title="Do którego paczkomatu?"/>
+                <Button Disabled="@SubmitDisabled" Loading="Loading" Clicked="SendPackage" Color="Color.Primary" Style="width: 100%;">Wyślij!</Button>
+            </Column>
+        </Row>
+    </Container>
+</AuthorizedComponentBase>
+
+@code {
+    private bool SubmitDisabled = true;
+    private bool Loading = false;
+    private bool Error = false;
+
+    private string? ToUser { get; set; }
+    private Guid? FromLocker { get; set; }
+    private Guid? ToLocker { get; set; }
+
+    private void OnToUserChange(string? value)
+    {
+        ToUser = value;
+        UpdateButtonState();
+    }
+
+    private void OnFromLockerChange(Guid? value)
+    {
+        FromLocker = value;
+        UpdateButtonState();
+    }
+
+    private void OnToLockerChange(Guid? value)
+    {
+        ToLocker = value;
+        UpdateButtonState();
+    }
+
+    private void UpdateButtonState()
+    {
+        SubmitDisabled = ToUser == null || FromLocker == null || ToLocker == null;
+        StateHasChanged();
+    }
+
+    private async Task SendPackage()
+    {
+        SubmitDisabled = true;
+        Loading = true;
+        Error = false;
+        try
+        {
+            var result = await Http.PostAsJsonAsync("/api/Package/SendPackage", new SendPackageDto()
+            {
+                FromLocker = FromLocker!.Value,
+                ToLocker = ToLocker!.Value,
+                ToUser = ToUser!,
+            });
+            if (result.IsSuccessStatusCode)
+            {
+                var packageDto = await result.Content.ReadFromJsonAsync<PackageDto>();
+                Navigation.NavigateTo("/tracking/" + packageDto!.Id);
+            }
+            else throw new Exception();
+        }
+        catch (Exception e)
+        {
+            Error = true;
+            StateHasChanged();
+        }
+        finally
+        {
+            SubmitDisabled = false;
+            Loading = false;
+        }
+    }
+    } 

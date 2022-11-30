@@ -1,0 +1,68 @@
+﻿@page "/tracking/{PackageId:guid}"
+@using System.Net.Http.Json
+@using Sobczal.InPost.Client.Components.Common
+@using Blazorise
+@using Sobczal.InPost.Application.Dtos.Packages
+@using Sobczal.InPost.Client.Components.Tracking
+
+@inject IHttpClientFactory HttpClientFactory
+
+@if (Failed)
+{
+    <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+        <Heading Size="HeadingSize.Is3"><Icon Name="IconName.ExclamationTriangle"/> Package not found</Heading>
+    </div>
+}
+else
+{
+    <LoadedComponentBase Loading="@(PackageDto == null)">
+        <Container Style="width: 50rem; border: #F8B12A 3px solid; position: static; padding: 0; border-radius: 2rem; margin-top: 5rem; margin-bottom: 5rem;">
+            <Row Margin="Margin.Is0">
+                <Column ColumnSize="ColumnSize.Is5" Style="padding: 0;">
+                    <Image Source="/images/tracking.jpg" Style="width: 20rem; border-top-left-radius: 2rem; border-bottom-left-radius: 2rem; object-fit: cover;"/>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is7" Style="padding: 2rem; display: flex; flex-direction: column;">
+                    <Heading Size="HeadingSize.Is5">
+                        <Icon Name="IconName.IdCard"/> @PackageDto.Id
+                    </Heading>
+                    <Text><Icon Name="IconName.User"/> Od: @PackageDto.From.Username</Text>
+                    <Text><Icon Name="IconName.User"/> Do: @PackageDto.To.Username</Text>
+                    <Text><Icon Name="IconName.Clock"/> Wysłano: @PackageDto.SentAt.ToLocalTime()</Text>
+                    <Text><Icon Name="IconName.ArrowUp"/> Wysłano z: @($"{PackageDto.Source.Name} ({PackageDto.Source.Address})")</Text>
+                    <Text><Icon Name="IconName.ArrowDown"/> Wysłano do: @($"{PackageDto.Destination.Name} ({PackageDto.Destination.Address})")</Text>
+                    <div style="height: 1rem;"/>
+                    @foreach (var packageStep in PackageDto.PackageSteps)
+                    {
+                        <PackageStepComponent PackageStep="@packageStep"/>
+                    }
+                </Column>
+            </Row>
+        </Container>
+    </LoadedComponentBase>
+}
+
+@code {
+
+    [Parameter]
+    public Guid PackageId { get; set; }
+
+    public bool Failed { get; set; } = false;
+
+    public PackageDto? PackageDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var http = HttpClientFactory.CreateClient("UnauthorizedServerAPI");
+            PackageDto = await http.GetFromJsonAsync<PackageDto>($"api/Package/GetPackageInfo/{PackageId}");
+        }
+        catch (Exception e)
+        {
+            Failed = true;
+        }
+
+        StateHasChanged();
+    }
+
+}

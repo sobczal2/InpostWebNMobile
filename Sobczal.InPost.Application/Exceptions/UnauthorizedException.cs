@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Sobczal.InPost.Application.Results;
 
 namespace Sobczal.InPost.Application.Exceptions;
 
@@ -12,5 +11,4 @@ public class UnauthorizedException : InPostException
         _description = description;
     }
     public override HttpStatusCode HttpStatusCode => HttpStatusCode.Unauthorized;
-    public override InPostErrorResult InPostErrorResult => new InPostErrorResult("Unauthorized", _description);
 }

@@ -2,5 +2,8 @@
 
 public enum PackageStepTypeDto
 {
-    SentAtBox,
+    SentAtBox = 0,
+    InDelivery = 1,
+    ReadyForPickup = 2,
+    PickedUp = 3,
 }

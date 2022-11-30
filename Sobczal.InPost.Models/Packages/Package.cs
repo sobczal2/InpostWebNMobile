@@ -17,4 +17,19 @@ public class Package : Entity<Guid>
     public string ToId { get; set; } = default!;
     public bool CanBePickedUp { get; set; }
     public virtual IEnumerable<PackageStep> PackageSteps { get; set; } = default!;
+
+    public void BumpStep()
+    {
+        var lastPackageStep = PackageSteps.OrderBy(x => x.Type).Last();
+        if(PackageStepType.PickedUp == lastPackageStep.Type)
+            return;
+        var packageSteps = PackageSteps.ToList();
+        packageSteps.Add(new PackageStep
+        {
+            PackageId = Id,
+            Type = lastPackageStep.Type + 1,
+            At = DateTime.UtcNow
+        });
+        PackageSteps = packageSteps;
+    }
 }
